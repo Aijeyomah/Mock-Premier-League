@@ -22,4 +22,13 @@ export default {
   FETCH_SALE_ITEM_PRICE_FAILED: 'failed to fetch sale item price ',
   SUBMITTED_VENDOR_ORDER: 'Submitted vendor order successfully',
   FAILED_VENDOR_ORDER: 'Failed to Submit vendor order',
+  EMAIL_EXIST_VERIFICATION_FAIL_MSG: 'Error verifying existence of user, try again.',
+  REDIS_RUNNING: 'Redis server is running',
+  SUCCESS: 'success',
+  LOGIN_USER_SUCCESSFULLY: 'login successful',
+  LOGIN_USER_FAILED: 'Error login user in',
+  CREATE_USER_SUCCESSFULLY: 'Successfully registered user',
+  CREATE_USER_FAILED: 'Error registering user',
+  USER_EMAIL_EXIST_VERIFICATION_FAIL_MSG: 'Error verifying existence of staff, try again.',
+
 };

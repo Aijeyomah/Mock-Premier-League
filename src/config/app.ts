@@ -1,3 +1,4 @@
+import { db } from './../db/setup/mongo';
 /* eslint-disable no-unused-vars */
 import morgan from 'morgan';
 import { json, urlencoded } from 'express';
@@ -6,6 +7,8 @@ import helmet from 'helmet';
 import apiV1Routes from '../routes/v1';
 import config from './env';
 import { constants, genericErrors, Helper } from '../utils';
+import { redisDB } from 'db';
+
 
 const { errorResponse, successResponse } = Helper;
 const { notFoundApi } = genericErrors;
@@ -30,10 +33,14 @@ const appConfig = (app) => {
   
   // serves v1 api routes
   app.use(v1, apiV1Routes);
+
   // catches 404 errors and forwards them to error handlers
   app.use((req, res, next) => {
     next(notFoundApi);
-  });
+  })
+  redisDB.connect()
+  redisDB.on('connect', () =>  logger.info('REDIS_RUNNING'));
+
   // handles all forwarded errors
   app.use((err, req, res, next) => errorResponse(req, res, err));
   const port = config.PORT || 3500;

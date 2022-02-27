@@ -20,6 +20,6 @@
     },
     "include": ["./src/**/*.tsx", "./src/**/*.ts"],
     "exclude": ["node_modules", "test/**/*.ts"],
-    "typeRoots": ["src/types/global.d.ts" ]
+    "typeRoots": ["src/types/global.d.ts", "src/types/custom.d.ts" ]
   }
   
