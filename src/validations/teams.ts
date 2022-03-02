@@ -3,7 +3,7 @@ import Joi from '@hapi/joi';
 
 
 const validField = ['Goal Keeper', 'Central Back', 'Central Midfield', 'Central Forward', 'Left Wing', 'Attacking Midfield', 'Central Forward', 'Left Midfielder', 'Striker', 'Defending', 'Right Midfielder']
-const validTeamName = ['AFC Bournemouth', 'Arsenal', 'Aston Villa', 'Brighton & Hove Albion', 'Burnley', 'Chelsea', 'Crystal Palace', 'Everton', 'Leicester City', 'Liverpool', 'Manchester City', 'Manchester United',
+const validTeamNames = ['AFC Bournemouth', 'Arsenal', 'Aston Villa', 'Brighton & Hove Albion', 'Burnley', 'Chelsea', 'Crystal Palace', 'Everton', 'Leicester City', 'Liverpool', 'Manchester City', 'Manchester United',
   'Newcastle United', ' Norwich City', 'Sheffield United', 'Southampton', 'Tottenham Hotspur', 'Watford', 'West Ham United', 'Wolverhampton Wanderers']
 
   const teamMembersArray = Joi.object({
@@ -18,8 +18,7 @@ const validTeamName = ['AFC Bournemouth', 'Arsenal', 'Aston Villa', 'Brighton & 
 export const addTeamSchema = Joi.object({
   teamName: Joi.string()
     .trim()
-    .valid('AFC Bournemouth', 'Arsenal', 'Aston Villa', 'Brighton & Hove Albion', 'Burnley', 'Chelsea', 'Crystal Palace', 'Everton', 'Leicester City', 'Liverpool', 'Manchester City', 'Manchester United',
-    'Newcastle United', ' Norwich City', 'Sheffield United', 'Southampton', 'Tottenham Hotspur', 'Watford', 'West Ham United', 'Wolverhampton Wanderers')
+    .valid(...validTeamNames)
     .required(),
   teamMembers: Joi.array()
     .unique((a, b) => a.name === b.name)
@@ -40,3 +39,6 @@ export const addTeamSchema = Joi.object({
       teamId: Joi.string()
         .required(),
     });
+
+
+    

@@ -1,3 +1,4 @@
+import { logger } from './../../config/logger';
 import { NextFunction, Request, Response } from 'express';
 /* eslint-disable no-underscore-dangle */
 import { loginSchema, signupSchema,  } from '../../validations';

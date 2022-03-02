@@ -1,3 +1,5 @@
+import { ILogObject } from 'tslog';
+import { logger } from './../config/logger';
 import { IUser } from './../models/user';
 import { IErrorParams } from './../types/response';
 import { Request, Response } from 'express';
@@ -142,7 +144,7 @@ class Helper {
    * @memberof Helpers
    * @returns {String} - It returns null.
    */
-   static apiErrLogMessager(error:IErrorValues, req: Request): string {
+   static apiErrLogMessager(error:IErrorValues, req: Request): ILogObject {
    return logger.error(
       `${error.name} - ${error.status} - ${error.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`
     );

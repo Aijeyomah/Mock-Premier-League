@@ -1,3 +1,4 @@
+import { logger } from './../config/logger';
 import JoiBase from '@hapi/joi';
 import JoiDate from '@hapi/joi-date';
 

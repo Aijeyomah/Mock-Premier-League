@@ -41,6 +41,19 @@ export default {
   SUCCESSFULLY_FETCHED_ALL_TEAM: 'Successfully fetched all teams',
   CANNOT_PERFORM_SEARCH: 'Could not search for the team',
   DUPLICATE_TEAM_NAME: 'Duplicate team name',
-  SUCCESSFULLY_UPDATED_TEAM: 'Successfully updated team'
+  SUCCESSFULLY_UPDATED_TEAM: 'Successfully updated team',
+  DUPLICATE_FIXTURE_NAME: 'Duplicate fixtures',
+  SUCCESSFULLY_ADDED_FIXTURE: 'Successfully created fixtures',
+  ERROR_ADDING_FEATURES: 'Error adding features',
+  INVALID_FIXTURE: 'Fixture does not exist',
+  ERROR_DELETING_FIXTURE: 'Error deleting fixture',
+  SUCCESSFULLY_DELETED_FIXTURE: 'Successfully deleted fixture',
+  ERROR_UPDATING_FIXTURES: 'Error updating fixtures',
+  SUCCESSFULLY_UPDATED_FIXTURES: 'Successfully updated fixtures',
+  SUCCESSFULLY_FETCHED_FIXTURE: 'Successfully fixture',
+  SUCCESSFULLY_FETCHED_FIXTURES: 'Successfully all fixtures',
+  ERROR_FETCHING_FIXTURE: 'Error fetching fixture',
+  ERROR_FETCHING_FIXTURES: 'Error fetching all fixture',
+  ERROR_FETCHING_PENDING_FIXTURES: 'Error fetching pending fixture'
 
 };

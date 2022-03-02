@@ -16,7 +16,15 @@ const {
   ERROR_FETCHING_TEAM,
   ERROR_FETCHING_PAGE_TEAM,
   CANNOT_PERFORM_SEARCH,
-  DUPLICATE_TEAM_NAME
+  DUPLICATE_TEAM_NAME,
+  DUPLICATE_FIXTURE_NAME,
+  ERROR_ADDING_FEATURES,
+  INVALID_FIXTURE,
+  ERROR_DELETING_FIXTURE,
+  ERROR_UPDATING_FIXTURES,
+  ERROR_FETCHING_FIXTURE,
+  ERROR_FETCHING_PENDING_FIXTURES,
+  ERROR_FETCHING_FIXTURES
 } = constants;
 
 export default {
@@ -34,7 +42,19 @@ export default {
   invalidTeam: new ApiError({ message: TEAM_DOES_NOT_EXIST, status: 400 }),
   errorFetchingTeam: new ApiError({ message: ERROR_FETCHING_PAGE_TEAM, status: 400  }),
   cannotSearchForTeam: new ApiError({ message: CANNOT_PERFORM_SEARCH, status: 400  }),
-  duplicateTeamName: new ApiError({ message: DUPLICATE_TEAM_NAME, status: 400  })
+  duplicateTeamName: new ApiError({ message: DUPLICATE_TEAM_NAME, status: 400  }),
+  duplicateFixtures: new ApiError({ message: DUPLICATE_FIXTURE_NAME, status: 400  }), 
+  errorAddingFixtures: new ApiError({ message: ERROR_ADDING_FEATURES, status: 400  }), 
+  invalidFixture:  new ApiError({ message: INVALID_FIXTURE, status: 400  }), 
+  errorDeletingFixture:  new ApiError({ message: ERROR_DELETING_FIXTURE, status: 400  }), 
+  errorUpdatingFixture:  new ApiError({ message: ERROR_UPDATING_FIXTURES, status: 400  }), 
+  errorFetchingSingleFixture:  new ApiError({ message: ERROR_FETCHING_FIXTURE, status: 400  }),
+  errorFetchingAllFixture:  new ApiError({ message: ERROR_FETCHING_FIXTURES, status: 400  }), 
+  errorFetchingPendingFixture:  new ApiError({ message: ERROR_FETCHING_PENDING_FIXTURES, status: 400  }),
+ 
+
+
+
 
 
 };

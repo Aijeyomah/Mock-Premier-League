@@ -15,7 +15,7 @@ const router = Router();
 router.post(
     '', 
    authenticate,
-   roleAccessValidator('Admin'),
+   roleAccessValidator(['Admin']),
    validateAddTeam,
    addMembersToTeam
 );
@@ -23,7 +23,7 @@ router.post(
 router.delete(
     '/:teamId', 
    authenticate,
-   roleAccessValidator('Admin'),
+   roleAccessValidator(['Admin']),
    validateParams(idParam),
    removeTeam
 );
@@ -31,7 +31,7 @@ router.delete(
 router.put(
     '/:teamId', 
    authenticate,
-   roleAccessValidator('Admin'),
+   roleAccessValidator(['Admin']),
    validateParams(idParam),
    validateAddTeam,
    editTeam
@@ -40,14 +40,14 @@ router.put(
 router.get(
     '/all', 
    authenticate,
-   roleAccessValidator('Admin'),
+   roleAccessValidator(['Admin']),
    getAllTeams
 );
 
 router.get(
     '/:teamId', 
    authenticate,
-   roleAccessValidator('Admin'),
+   roleAccessValidator(['Admin']),
    validateParams(idParam),
    getTeam
 );

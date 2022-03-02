@@ -1,3 +1,3 @@
 export default {
-    roles: ['Admin', 'Client']
+    roles: ['Admin', 'User']
   };

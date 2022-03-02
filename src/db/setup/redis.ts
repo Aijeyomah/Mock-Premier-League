@@ -19,11 +19,11 @@ if (NODE_ENV === 'test') {
       try {
         await redisDB.flushDb();
       } catch (e) {
-        logger.error(`An Error occurred while removing test keys with the message: ${e.message}`);
+       console.log(`An Error occurred while removing test keys with the message: ${e.message}`);
       }
     })
     .catch((e) => {
-      logger.error(`An Error occurred while spawning a 
+      console.log(`An Error occurred while spawning a 
       new Redis database with the following message: ${e.message}`);
       process.exit(1);
     })

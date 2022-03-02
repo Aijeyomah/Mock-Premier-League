@@ -1,3 +1,6 @@
+import { IUser } from 'models/user';
+
+import { logger } from './../../config/logger';
 import { loginSchema , signupSchema  } from '../../validations/index';
 import { Helper, ApiError, constants, genericErrors } from '../../utils';
 import UserModel from 'models/user';
@@ -5,6 +8,15 @@ import { Request, Response, NextFunction } from 'express';
 const { errorResponse, verifyToken, moduleErrLogMessenger } = Helper;
 const { EMAIL_CONFLICT, EMAIL_EXIST_VERIFICATION_FAIL_MSG, FAIL } = constants;
 
+declare module 'express' {
+    export interface Request {
+        user?: IUser
+       data?: string
+       
+      
+    }
+
+ }
 /**
  * validates staff profile create request details
  * @class AuthMiddleware
@@ -23,13 +35,13 @@ class AuthMiddleware {
     static async validateSignUpField(req: Request, res: Response, next: NextFunction) {
         try {
             await signupSchema.validateAsync(req.body);
-            next();
+           return next();
         } catch (e) {
             const apiError = new ApiError({
                 status: FAIL,
                 message: e.details[0].message,
             });
-           errorResponse(req, res, apiError);
+            return errorResponse(req, res, apiError);
         }
     }
 
@@ -46,18 +58,18 @@ class AuthMiddleware {
     static async validateLoginSchema(req: Request, res: Response, next: NextFunction) {
         try {
             await loginSchema.validateAsync(req.body);
-            next();
+            return next();
         } catch (e) {
             const apiError = new ApiError({
                 status: 400,
                 message: e.details[0].message,
             });
-            errorResponse(req, res, apiError);
+            return  errorResponse(req, res, apiError);
         }
     }
 
     /**
-     * Checks if a specific already exist for a staff account.
+     * Checks if a specific already exist.
      * @static
      * @param { Object } req - The request from the endpoint.
      * @param { Object } res - The response returned by the method.
@@ -103,6 +115,8 @@ class AuthMiddleware {
      * @memberof AuthMiddleware
      *
      */
+
+ 
     static async UserLoginEmailValidator( req: Request, res: Response, next: NextFunction) {
         try {
             const { email } = req.body
@@ -189,17 +203,17 @@ class AuthMiddleware {
      * @memberof AuthMiddleware
      *
      */
-    static async authenticate(req: Request, res: Response, next: NextFunction) {
+    static async authenticate( req: Request, res: Response, next: NextFunction) {
         const token = AuthMiddleware.checkToken(req);
         if (!token) {
-             errorResponse(req, res, genericErrors.authRequired);
+             return errorResponse(req, res, genericErrors.authRequired);
         }
         try {
             const decoded = verifyToken(token);
             req.data = decoded;
-            next();
+           return next();
         } catch (err) {
-            errorResponse(req, res, genericErrors.authRequired);
+            return errorResponse(req, res, genericErrors.authRequired);
         }
     }
 }

@@ -1,3 +1,4 @@
+import { logger } from './../config/logger';
 import { Request, Response, NextFunction } from 'express';
 import UserModel from 'models/user';
 /* eslint-disable no-underscore-dangle */
@@ -28,14 +29,14 @@ export const createUser = async (req:Request, res:Response, next:NextFunction)  
     const token = Helper.generateToken( {id: user._id, email, role  });
 
     const doc = await user.save();
-       Helper.successResponse(res, {
+      return Helper.successResponse(res, {
         message: CREATE_USER_SUCCESSFULLY,
         data: {id: user._id, email, role , token }
       });
 
   } catch (error) {
     console.log(error)
-    next(new ApiError({ message: CREATE_USER_FAILED }));
+    return next(new ApiError({ message: CREATE_USER_FAILED }));
   }
 }
 
@@ -47,13 +48,13 @@ export const loginUser = async(req:Request, res:Response, next:NextFunction) => 
       req.user.password,
     );
     if (!isAuthenticUser) {
-       Helper.errorResponse(req, res, genericErrors.inValidLogin);
+      return Helper.errorResponse(req, res, genericErrors.inValidLogin);
     }
 
      const data = Helper.addTokenToData(req.user);
       Helper.successResponse(res, { data, message: LOGIN_USER_SUCCESSFULLY });
     } catch (e) {
       logger.error(e)
-      next(new ApiError({ message: LOGIN_USER_FAILED, errors: e.message }));
+      return next(new ApiError({ message: LOGIN_USER_FAILED, errors: e.message }));
     }
   };

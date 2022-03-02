@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rimraf dist && tsc",
+    "test": "NODE_ENV=test NODE_PATH=./src mocha --require ts-node/register 'test/integration/**/*.test.ts' --timeout 20000 --exit",
     "start": "npm run build && NODE_PATH=./dist node ./dist/index.js",
+    "build": "rimraf dist && tsc",
     "lint-prettier": "prettier --config .prettierrc --list-different '{src,test}/**/*.{ts,js,css,scss}'",
     "prettier": "prettier --config .prettierrc --write './**/*.{ts,js,css,scss,json,md}'",
     "test-integration": "NODE_ENV=test NODE_PATH=./src mocha --require ts-node/register 'test/integration/**/*.test.ts' --timeout 20000 --exit",
@@ -83,6 +83,7 @@
     "prettier": "^2.4.0",
     "pretty-quick": "^3.1.1",
     "supertest": "^6.1.6",
+    "ts-mocha": "^9.0.2",
     "ts-node": "10.2.1",
     "ts-node-dev": "^1.1.8",
     "typescript": "4.4.3"

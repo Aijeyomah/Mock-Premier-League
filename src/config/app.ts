@@ -1,3 +1,4 @@
+import { logger } from './logger';
 import { db } from './../db/setup/mongo';
 /* eslint-disable no-unused-vars */
 import morgan from 'morgan';
@@ -9,6 +10,7 @@ import config from './env';
 import { constants, genericErrors, Helper } from '../utils';
 import { redisDB } from 'db';
 
+// sets logger as a global variable
 
 const { errorResponse, successResponse } = Helper;
 const { notFoundApi } = genericErrors;
@@ -20,7 +22,7 @@ const {
 
 const appConfig = (app) => {
   // integrate winston logger with morgan
-  app.use(morgan('combined', { stream: logger.stream }));
+ // app.use(morgan('combined', { stream: logger.stream }));
   // adds security middleware to handle potential attacks from HTTP requests
   app.use(helmet());
   // adds middleware for cross-origin resource sharing configuration
@@ -38,8 +40,8 @@ const appConfig = (app) => {
   app.use((req, res, next) => {
     next(notFoundApi);
   })
-  redisDB.connect()
-  redisDB.on('connect', () =>  logger.info('REDIS_RUNNING'));
+  //redisDB.connect()
+  //redisDB.on('connect', () =>  logger.info('REDIS_RUNNING'));
 
   // handles all forwarded errors
   app.use((err, req, res, next) => errorResponse(req, res, err));
