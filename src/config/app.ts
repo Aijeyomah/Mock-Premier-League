@@ -15,7 +15,7 @@ const { notFoundApi } = genericErrors;
 const {
   WELCOME,
   v1,
-  JETT_RUNNING,
+  MOCK_PREMIER_LEAGUE_RUNNING,
 } = constants;
 
 const appConfig = (app) => {
@@ -45,7 +45,7 @@ const appConfig = (app) => {
   app.use((err, req, res, next) => errorResponse(req, res, err));
   const port = config.PORT || 3500;
   app.listen(port, () => {
-    logger.info(`${JETT_RUNNING} ${port}`);
+    logger.info(`${MOCK_PREMIER_LEAGUE_RUNNING} ${port}`);
   });
 };
 

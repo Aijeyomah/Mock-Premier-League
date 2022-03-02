@@ -8,7 +8,15 @@ const {
   INVALID_PERMISSION,
   INVALID_CREDENTIALS,
   ACCESS_REVOKED,
-  CREATE_USER_FAILED
+  CREATE_USER_FAILED,
+  ERROR_CREATING_TEAM,
+  ERROR_REMOVING_TEAM,
+  ERROR_EDITING_TEAM,
+  TEAM_DOES_NOT_EXIST,
+  ERROR_FETCHING_TEAM,
+  ERROR_FETCHING_PAGE_TEAM,
+  CANNOT_PERFORM_SEARCH,
+  DUPLICATE_TEAM_NAME
 } = constants;
 
 export default {
@@ -20,5 +28,13 @@ export default {
   conflictSignupError: new ApiError({ message: INVALID_CREDENTIALS, status: 409, }),
   errorCreatingStaff: new ApiError({message: CREATE_USER_FAILED, status: 401, }),
   authRequired: new ApiError({ message: AUTH_REQUIRED, status: 401 }),
+  errorAddingTeam: new ApiError({ message: ERROR_CREATING_TEAM, status: 400 }),  
+  errorRemovingTeam: new ApiError({ message: ERROR_REMOVING_TEAM, status: 400 }),
+  errorEditingTeam: new ApiError({ message: ERROR_EDITING_TEAM, status: 400 }),
+  invalidTeam: new ApiError({ message: TEAM_DOES_NOT_EXIST, status: 400 }),
+  errorFetchingTeam: new ApiError({ message: ERROR_FETCHING_PAGE_TEAM, status: 400  }),
+  cannotSearchForTeam: new ApiError({ message: CANNOT_PERFORM_SEARCH, status: 400  }),
+  duplicateTeamName: new ApiError({ message: DUPLICATE_TEAM_NAME, status: 400  })
+
 
 };

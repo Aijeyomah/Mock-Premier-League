@@ -16,7 +16,7 @@ export default {
   DB_ERROR: 'A database error occurred, either in redis or postgres',
   MODULE_ERROR: 'A module error occurred',
   INVALID_ROLE_PARAMETER: 'Invalid role value',
-  JETT_RUNNING: 'Jett is running on PORT',
+  MOCK_PREMIER_LEAGUE_RUNNING: 'Mock premier league app is running on PORT',
   SALE_INFORMATION_ERROR: 'Error Fetching sales proper',
   FETCH_SALE_ITEM_PRICE: 'Successfully fetched sale item price',
   FETCH_SALE_ITEM_PRICE_FAILED: 'failed to fetch sale item price ',
@@ -30,5 +30,17 @@ export default {
   CREATE_USER_SUCCESSFULLY: 'Successfully registered user',
   CREATE_USER_FAILED: 'Error registering user',
   USER_EMAIL_EXIST_VERIFICATION_FAIL_MSG: 'Error verifying existence of staff, try again.',
+  SUCCESSFULLY_ADDED_TEAM: 'Team added successfully',
+  ERROR_CREATING_TEAM: 'Error adding to team',
+  ERROR_REMOVING_TEAM: 'Error removing to team',
+  SUCCESSFULLY_REMOVED_TEAM: 'Successfully removed team',
+  ERROR_EDITING_TEAM: 'Error editing team',
+  TEAM_DOES_NOT_EXIST: 'Team does not exist',
+  ERROR_FETCHING_TEAM: ' Error fetching Team',
+  ERROR_FETCHING_PAGE_TEAM: 'Could not fetch teams for that page',
+  SUCCESSFULLY_FETCHED_ALL_TEAM: 'Successfully fetched all teams',
+  CANNOT_PERFORM_SEARCH: 'Could not search for the team',
+  DUPLICATE_TEAM_NAME: 'Duplicate team name',
+  SUCCESSFULLY_UPDATED_TEAM: 'Successfully updated team'
 
 };

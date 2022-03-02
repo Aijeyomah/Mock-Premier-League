@@ -23,16 +23,18 @@ export const createUser = async (req:Request, res:Response, next:NextFunction)  
       lastName,
       role
     });
+   
 
     const token = Helper.generateToken( {id: user._id, email, role  });
 
     const doc = await user.save();
        Helper.successResponse(res, {
         message: CREATE_USER_SUCCESSFULLY,
-        data: {id: user._id, email, role  }
+        data: {id: user._id, email, role , token }
       });
 
   } catch (error) {
+    console.log(error)
     next(new ApiError({ message: CREATE_USER_FAILED }));
   }
 }

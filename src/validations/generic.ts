@@ -1,8 +1,7 @@
 import JoiBase from '@hapi/joi';
 import JoiDate from '@hapi/joi-date';
-// import { emailSchema, validateDateSchema } from './staff';
 
-const Joi = JoiBase.extend(JoiDate);
+ const Joi = JoiBase.extend(JoiDate);
 
 /**
  * @function custom email validation
@@ -35,21 +34,22 @@ const Joi = JoiBase.extend(JoiDate);
  * @returns { Object } Returns a chain validation object
  * containing validation rules for a text field.
  */
-export const textSchema = (joiObject, field: string, max?: number, min?: number) => (
+export const textSchema = (joiObject, field: string, max?: number, min?: number ) => (
   joiObject
-    .string()
-    .trim()
-    .min(min)
-    .max(max)
-    .required()
-    .messages({
-      'string.base': `${field} field must be a valid string`,
-      'string.empty': `${field} field cannot be an empty string`,
-      'string.min': `${field} field must be at least ${min} characters long`,
-      'string.max': `${field} field must be at most ${max} characters long`,
-      'any.required': `${field} field is required`,
-    })
-);
+  .string()
+  .trim()
+  .min(min)
+  .max(max)
+  .required()
+  .messages({
+    'string.base': `${field} field must be a valid string`,
+    'string.empty': `${field} field cannot be an empty string`,
+    'string.min': `${field} field must be at least ${min} characters long`,
+    'string.max': `${field} field must be at most ${max} characters long`,
+    'any.required': `${field} field is required`,
+  })
+)
+ 
 
 /**
  * @function A custom text validation
@@ -94,3 +94,19 @@ export const textEnumSchema = (joiObject, field:string, options) => (
       'any.only': `${field} field must be one of the following: ${options.join(', ')}`,
     })
 );
+
+export const validateData = async(data, schema) => {
+  try {
+    const options = {
+      language: {
+        key: '{{key}} ',
+      },
+    };
+    const result = await schema.validate(data, options);
+    return result;
+  } catch (error) {
+    logger.error(error);
+    return error;
+  }
+};
+

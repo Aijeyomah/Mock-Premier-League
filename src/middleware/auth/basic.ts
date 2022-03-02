@@ -3,7 +3,7 @@ import { Helper, ApiError, constants, genericErrors } from '../../utils';
 import UserModel from 'models/user';
 import { Request, Response, NextFunction } from 'express';
 const { errorResponse, verifyToken, moduleErrLogMessenger } = Helper;
-const { EMAIL_CONFLICT, EMAIL_EXIST_VERIFICATION_FAIL_MSG } = constants;
+const { EMAIL_CONFLICT, EMAIL_EXIST_VERIFICATION_FAIL_MSG, FAIL } = constants;
 
 /**
  * validates staff profile create request details
@@ -26,10 +26,10 @@ class AuthMiddleware {
             next();
         } catch (e) {
             const apiError = new ApiError({
-                status: 400,
+                status: FAIL,
                 message: e.details[0].message,
             });
-            errorResponse(req, res, apiError);
+           errorResponse(req, res, apiError);
         }
     }
 
@@ -71,7 +71,7 @@ class AuthMiddleware {
             const { email } = req.body
             const user = await UserModel.findOne({ email }).exec();
             if (user) {
-                 errorResponse(
+                return errorResponse(
                     req,
                     res,
                     new ApiError({
@@ -80,11 +80,11 @@ class AuthMiddleware {
                     })
                 );
             }
-            next();
+           return next();
         } catch (e) {
             e.status = constants.EMAIL_EXIST_VERIFICATION_FAIL_MSG;
             Helper.moduleErrLogMessenger(e);
-            errorResponse(
+           return errorResponse(
                 req,
                 res,
                 new ApiError({ message:  e.status })
@@ -110,7 +110,9 @@ class AuthMiddleware {
             if (!userData) {
                  errorResponse(req, res, genericErrors.inValidLogin);
             }
-            //req.user = userData;
+           logger.info('user exists')
+            
+            req.user = userData;
             next();
         } catch (e) {
             e.status = constants.USER_EMAIL_EXIST_VERIFICATION_FAIL_MSG;
@@ -133,8 +135,7 @@ class AuthMiddleware {
      */
     static async generatePassword(req: Request, res: Response, next: NextFunction) {
         const password = Helper.generateUniquePassword();
-        const { hash, salt } = await Helper.hashPassword(password);
-        req.body.salt = salt;
+        const hash = await Helper.hashPassword(password);
         req.body.hash = hash;
         req.body.plainPassword = password;
         next();
