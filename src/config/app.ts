@@ -1,3 +1,4 @@
+import { rateLimiter } from './../middleware/team/rate-limiter';
 import { logger } from './logger';
 import { db } from './../db/setup/mongo';
 /* eslint-disable no-unused-vars */
@@ -28,6 +29,7 @@ const appConfig = (app) => {
   // adds middleware for cross-origin resource sharing configuration
   app.use(cors());
   app.use(json());
+  app.use(rateLimiter)
   // adds middleware that parses requests with x-www-form-urlencoded data encoding
   app.use(urlencoded({ extended: true }));
   // adds a heartbeat route for the culture

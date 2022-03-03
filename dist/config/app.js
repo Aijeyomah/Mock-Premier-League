@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const rate_limiter_1 = require("./../middleware/team/rate-limiter");
 const logger_1 = require("./logger");
 const express_1 = require("express");
 const cors_1 = __importDefault(require("cors"));
@@ -16,6 +17,7 @@ const appConfig = (app) => {
     app.use((0, helmet_1.default)());
     app.use((0, cors_1.default)());
     app.use((0, express_1.json)());
+    app.use(rate_limiter_1.rateLimiter);
     app.use((0, express_1.urlencoded)({ extended: true }));
     app.get('/', (req, res) => successResponse(res, { message: WELCOME }));
     app.use(v1, v1_1.default);
