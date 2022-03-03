@@ -1,9 +1,9 @@
-import { IUser } from 'models/user';
+import UserModel, { IUser } from '../../models/user';
 
 import { logger } from './../../config/logger';
 import { loginSchema , signupSchema  } from '../../validations/index';
 import { Helper, ApiError, constants, genericErrors } from '../../utils';
-import UserModel from 'models/user';
+
 import { Request, Response, NextFunction } from 'express';
 const { errorResponse, verifyToken, moduleErrLogMessenger } = Helper;
 const { EMAIL_CONFLICT, EMAIL_EXIST_VERIFICATION_FAIL_MSG, FAIL } = constants;

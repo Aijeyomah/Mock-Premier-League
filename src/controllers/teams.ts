@@ -1,5 +1,5 @@
 import { logger } from './../config/logger';
-import { genericErrors, Helper, constants } from 'utils';
+import { genericErrors, Helper, constants } from '../utils';
 import { TeamModel } from './../models/teams';
 import { Response, Request, NextFunction } from 'express';
 import mongoose from 'mongoose';

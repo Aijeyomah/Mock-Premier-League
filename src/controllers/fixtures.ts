@@ -1,7 +1,7 @@
 import { redisDB } from 'db/setup/redis';
 import { logger } from './../config/logger';
 import { FixtureModel } from './../models/fixtures';
-import { genericErrors, Helper, constants } from 'utils';
+import { genericErrors, Helper, constants } from '../utils';
 import { Response, Request, NextFunction } from 'express';
 import mongoose from 'mongoose';
 import moment from 'moment';

@@ -1,9 +1,9 @@
 import { logger } from './../config/logger';
 import { Request, Response, NextFunction } from 'express';
-import UserModel from 'models/user';
+import UserModel from '../models/user';
 /* eslint-disable no-underscore-dangle */
 import mongoose from 'mongoose';
-import { Helper, constants, ApiError, genericErrors } from 'utils';
+import { Helper, constants, ApiError, genericErrors } from '../utils';
 
 
 const { CREATE_USER_SUCCESSFULLY, CREATE_USER_FAILED, LOGIN_USER_SUCCESSFULLY, LOGIN_USER_FAILED } = constants;

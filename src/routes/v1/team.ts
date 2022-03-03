@@ -2,8 +2,8 @@ import { idParam } from './../../validations/teams';
 import { addMembersToTeam, removeTeam, editTeam, getTeam, getAllTeams } from './../../controllers/teams';
 import { Router } from 'express';
 import { AuthMiddleware } from '../../middleware/auth';
-import RoleMiddleware from 'middleware/auth/role';
-import TeamMiddleWare from 'middleware/team/teams';
+import RoleMiddleware from '../../middleware/auth/role';
+import TeamMiddleWare from '../../middleware/team/teams';
 
 
 const { authenticate } = AuthMiddleware

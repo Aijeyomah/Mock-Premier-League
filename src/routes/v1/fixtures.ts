@@ -2,8 +2,8 @@ import { fixtureId } from './../../validations/fixtures';
 import { createFixture, deleteFixture, updateFixture, viewSingleFixture, viewAllFixture, fetchCompletedFixtures, fetchPendingFixture, searchFixture } from './../../controllers/fixtures';
 import { Router } from 'express';
 import { AuthMiddleware } from '../../middleware/auth';
-import RoleMiddleware from 'middleware/auth/role';
-import TeamMiddleWare from 'middleware/team/teams';
+import RoleMiddleware from '../../middleware/auth/role';
+import TeamMiddleWare from '../../middleware/team/teams';
 
 
 const { authenticate } = AuthMiddleware

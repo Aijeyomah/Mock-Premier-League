@@ -10,7 +10,7 @@ import constants from './constants'
 import genericError from './error/generic';
 import DBError from './error/db.error';
 import ModuleError from './error/module.error';
-import config  from 'config';
+import config  from '../config';
 
 const { FAIL, SUCCESS, SUCCESS_RESPONSE } = constants;
 const { serverError } = genericError;
