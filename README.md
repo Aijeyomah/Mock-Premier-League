@@ -46,11 +46,11 @@ npm run start
 
 
 The API is hosted at
-[https://mock-premier-league1.herokuapp.com/](https://mock-premier-league-api.herokuapp.com/)
+[https://mock-premier-league1.herokuapp.com/](https://mock-premier-league1.herokuapp.com/)
 
 ## API Documentation
 
-[https://documenter.getpostman.com/view/11087570/UVktoY5u#f85188aa-f2eb-488e-b98b-2d2330fb8049](https://documenter.getpostman.com/view/6225567/SVn3tFec)
+[https://documenter.getpostman.com/view/11087570/UVktoY5u#f85188aa-f2eb-488e-b98b-2d2330fb8049](https://documenter.getpostman.com/view/11087570/UVktoY5u#f85188aa-f2eb-488e-b98b-2d2330fb8049)
 
 ## Author
 
