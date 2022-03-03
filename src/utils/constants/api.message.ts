@@ -12,7 +12,7 @@ export default {
   EMAIL_CONFLICT: 'A user with your email already exists',
   AUTH_REQUIRED: 'Access denied,a valid access token is required',
   HMAC_VALIDATION_FAILED: 'We cannot confirm this request is from shopify',
-  WELCOME: 'Thanks for dropping by, you are at Jetti app',
+  WELCOME: 'Thanks for dropping by, you are at Premier fixtures app',
   DB_ERROR: 'A database error occurred, either in redis or postgres',
   MODULE_ERROR: 'A module error occurred',
   INVALID_ROLE_PARAMETER: 'Invalid role value',

@@ -25,7 +25,7 @@ const team = {
     enum: ['AFC Bournemouth', 'Arsenal', 'Aston Villa', 'Brighton & Hove Albion', 'Burnley', 'Chelsea',
       'Crystal Palace', 'Everton', 'Leicester City', 'Liverpool', 'Manchester City', 'Manchester United',
       'Newcastle United', ' Norwich City', 'Sheffield United', 'Southampton', 'Tottenham Hotspur', 'Watford',
-      'West Ham United', 'Wolverhampton Wanderers', 'Barcalona']
+      'West Ham United', 'Wolverhampton Wanderers', 'Barcalona', 'wolves']
   },
   score: { type: Number, default: 0 }
 };

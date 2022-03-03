@@ -40,13 +40,13 @@ export const invalidLoginData ={
     "password": "mamamama"
   }
 export const createTeam = {
-    teamName: 'Barcalona',
+    teamName: 'wolves',
     teamMembers: [{ name: 'jamy Moraes', role: 'Central Forward' }, { name: 'Mahmoud Hassan', role: 'Attacking Midfield' }],
     description: "The worse team"
   };
 
   export const editTeamData = {
-    teamName: 'Brighton & Hove Albion',
+    teamName: 'wolves',
     teamMembers: [{ name: 'Wesley munich', role: 'Central Forward' }, { name: 'Mahmouda Hassan', role: 'Attacking Midfield' }],
     description: "The best team"
   };

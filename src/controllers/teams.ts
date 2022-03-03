@@ -199,7 +199,6 @@ export const getAllTeams = async (req: Request<teamParams, {}, {}, {}>, res: Res
             return successResponse(res, {
                 message: SUCCESSFULLY_FETCHED_ALL_TEAM,
                 data: data,
-                code: 201,
             });
         }
 

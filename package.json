@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test NODE_PATH=./src mocha --require ts-node/register 'test/integration/**/*.test.ts' --timeout 20000 --exit",
+    "test": "NODE_ENV=test NODE_PATH=./src mocha --require ts-node/register 'test/index.ts' --timeout 20000 --exit",
     "start:dev": "npm run build && NODE_PATH=./dist node ./dist/index.js",
     "start": "node ./dist/index.js",
     "build": "rimraf dist && tsc",
