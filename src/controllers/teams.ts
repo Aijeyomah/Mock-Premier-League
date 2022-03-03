@@ -8,7 +8,7 @@ import moment from 'moment';
 
 
 const { errorResponse, successResponse } = Helper;
-const { SUCCESSFULLY_ADDED_TEAM, SUCCESSFULLY_REMOVED_TEAM, SUCCESSFULLY_FETCHED_ALL_TEAM, SUCCESSFULLY_UPDATED_TEAM } = constants;
+const { SUCCESSFULLY_ADDED_TEAM, SUCCESSFULLY_REMOVED_TEAM, SUCCESSFULLY_FETCHED_ALL_TEAM, SUCCESSFULLY_UPDATED_TEAM, SUCCESSFULLY_FETCHED_TEAM } = constants;
 /**
    *  admin can add team
    * @param {object} req - response object
@@ -37,7 +37,6 @@ export const addMembersToTeam = async (req: Request, res: Response, next: NextFu
         return successResponse(res, {
             data,
             message: SUCCESSFULLY_ADDED_TEAM,
-            code: 201
         });
     } catch (error) {
         const err = error.errors.teamName.name === 'ValidatorError'
@@ -70,8 +69,7 @@ export const removeTeam = async (req: Request, res: Response, next: NextFunction
             return errorResponse(req, res, genericErrors.invalidTeam);
         }
         return successResponse(res, {
-            message: SUCCESSFULLY_REMOVED_TEAM,
-            code: 201
+            message: SUCCESSFULLY_REMOVED_TEAM
         });
     } catch (error) {
         return next(errorResponse(req, res, genericErrors.errorRemovingTeam));
@@ -109,7 +107,6 @@ export const editTeam = async (req: Request, res: Response, next: NextFunction) 
         }
         return successResponse(res, {
             message: SUCCESSFULLY_UPDATED_TEAM,
-            code: 201
         });
     } catch (error) {
         return next(errorResponse(req, res, genericErrors.errorEditingTeam));
@@ -144,8 +141,7 @@ export const getTeam = async (req: Request<Params, {}, {}, {}>, res: Response, n
         }
         return successResponse(res, {
             data: team,
-            message: SUCCESSFULLY_UPDATED_TEAM,
-            code: 201
+            message: SUCCESSFULLY_FETCHED_TEAM,
         });
     } catch (error) {
         return next(errorResponse(req, res, genericErrors.errorFetchingTeam));
@@ -228,28 +224,50 @@ export const getAllTeams = async (req: Request<teamParams, {}, {}, {}>, res: Res
    *
    */
 
-//   const searchTeam = (req: Request, res: Response) => {
-//     try {
-//     if (!req.query.q) {
-//           logger.error('No Search Query Provided!');
-//           errorResponse(req, res, genericErrors.cannotSearchForTeam);
+ export const searchTeam = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { name, date, status, stadium, role } = req.body;
+        const { query } = req;
+        let { perPage } = query;
+        // Check page number from the params sent in the url or set default to 1
+        const page: number = Number(query.page) || 1;
 
-//         }
+        // SET LIMIT OF number of fixtures to return
+        const limit: number = 10 || Number(perPage);
 
-//         const team = await new TeamModel.find({
-//             $text: {
-//                 $search: req.query.q,
-//               }
-//         })
-//           .exec();
-//         return response(res, 200, 'success', {
-//           team,
-//           count: team.length
-//         });
-//       }
-//     } catch (error) {
-//       return response(res, 400, 'error', {
-//         message: messages.error
-//       });
-//     }
-//   }
+        // SET THE NUMBER OF POSTS TO SKIP BASED ON PAGE NUMBER
+        const skip: number = (page * limit) - limit;
+        const fixturePromise = await TeamModel.find({
+            $or: [
+                { status },
+                { role },
+                { 'firstTeam.0.name': new RegExp(`^${name}$`, 'i') },
+                { 'firstTeam.0.name': new RegExp(`^${name}$`, 'i') },
+                { matchInfo: { $elemMatch: { date, stadium } } }
+            ]
+        }).sort({
+            createdAt: -1,
+        })
+            .skip(skip)
+            .limit(limit)
+            .exec();
+        const countPromise = await TeamModel.count();
+        const [allFixtures, count] = await Promise.all([fixturePromise, countPromise]);
+        const pages = Math.ceil(count / limit);
+
+        // If posts is empty for paginated Pages
+        if (!allFixtures.length && skip) {
+            return errorResponse(req, res, genericErrors.invalidTeam);
+        } else {
+            const data = { teams: allFixtures, page, pages, count }
+            return successResponse(res, {
+                message: SUCCESSFULLY_FETCHED_ALL_TEAM,
+                data: data,
+                code: 201,
+            });
+        }
+    } catch (error) {
+        return next(errorResponse(req, res, genericErrors.errorFetchingTeam));
+
+    }
+}

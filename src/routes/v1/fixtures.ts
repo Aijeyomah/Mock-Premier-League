@@ -32,8 +32,7 @@ router.delete(
 
 router.put(
     '/:fixtureId',
-    authenticate,
-    roleAccessValidator(['Admin']),
+   //authenticate,
     validateParams(fixtureId),
     updateFixture
 );
@@ -55,12 +54,13 @@ router.get(
     roleAccessValidator('Admin'),
     searchFixture
 );
+
+
 router.get(
-    '',
+    '/all',
     authenticate,
     viewAllFixture
 );
-
 
 router.get(
     '/:fixtureId',

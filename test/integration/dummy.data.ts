@@ -40,13 +40,25 @@ export const invalidLoginData ={
     "password": "mamamama"
   }
 export const createTeam = {
-    teamName: 'Leicester City',
-    teamMembers: [{ name: 'Wesley Moraes', role: 'Central Forward' }, { name: 'Mahmoud Hassan', role: 'Attacking Midfield' }],
+    teamName: 'Barcalona',
+    teamMembers: [{ name: 'jamy Moraes', role: 'Central Forward' }, { name: 'Mahmoud Hassan', role: 'Attacking Midfield' }],
     description: "The worse team"
   };
 
   export const editTeamData = {
-    teamName: 'Leicester City',
-    teamMembers: [{ name: 'Wesley Moraes', role: 'Central Forward' }, { name: 'Mahmoud Hassan', role: 'Attacking Midfield' }],
+    teamName: 'Brighton & Hove Albion',
+    teamMembers: [{ name: 'Wesley munich', role: 'Central Forward' }, { name: 'Mahmouda Hassan', role: 'Attacking Midfield' }],
     description: "The best team"
   };
+
+export const createFixture = {
+  teamA: [{ name: 'Arsenal', score: 0 }],
+  teamB: [{ name: 'Southampton', score: 0 }],
+  matchInfo: [{ date: '2019-11-26T16:24:32.674+00:00' }, { stadium: 'Craven Cottage' }]
+};
+
+export const editFixture = {
+  teamA: [{ name: 'Arsenal', score: 0 }],
+  teamB: [{ name: 'Brighton & Hove Albion', score: 0 }],
+  matchInfo: [{ date: '2019-11-26T16:24:32.674+00:00' }, { stadium: 'Craven Cottage' }]
+};

@@ -1,3 +1,4 @@
+import { redisDB } from 'db/setup/redis';
 import { logger } from './../config/logger';
 import { FixtureModel } from './../models/fixtures';
 import { genericErrors, Helper, constants } from 'utils';
@@ -6,7 +7,10 @@ import mongoose from 'mongoose';
 import moment from 'moment';
 
 const { errorResponse, successResponse, compareTwoTeams } = Helper;
-const { SUCCESSFULLY_ADDED_FIXTURE, SUCCESSFULLY_DELETED_FIXTURE, SUCCESSFULLY_UPDATED_FIXTURES, SUCCESSFULLY_FETCHED_FIXTURE, SUCCESSFULLY_FETCHED_FIXTURES, } = constants;
+const { SUCCESSFULLY_ADDED_FIXTURE, SUCCESSFULLY_DELETED_FIXTURE, SUCCESSFULLY_UPDATED_FIXTURES, SUCCESSFULLY_FETCHED_FIXTURE, SUCCESSFULLY_FETCHED_FIXTURES, BASE_URL, REDIS_KEYS } = constants;
+
+const { singleFixture } = REDIS_KEYS;
+
 /**
  *  admin can add fixture
  * @param {object} req - response object
@@ -35,16 +39,16 @@ export const createFixture = async(req: Request, res: Response, next: NextFuncti
             if (pendingFixtures.length > 0) {
                 return errorResponse(req, res, genericErrors.duplicateFixtures);
             }
+            
             const data = await fixture.save();
+            
             return successResponse(res, {
-                data: data,
+                data: {fixtureLink:  `${BASE_URL}/api/v1/fixture/${data._id}`, ...data},
                 message: SUCCESSFULLY_ADDED_FIXTURE,
-                code: 201
             });
         }
     } catch (error) {
         return next(errorResponse(req, res, genericErrors.errorAddingFixtures));
-
     }
 }
 
@@ -68,7 +72,6 @@ export const deleteFixture = async (req: Request, res: Response, next: NextFunct
         }
         return successResponse(res, {
             message: SUCCESSFULLY_DELETED_FIXTURE,
-            code: 201
         });
     } catch (error) {
         return next(errorResponse(req, res, genericErrors.errorDeletingFixture));
@@ -108,7 +111,6 @@ export const updateFixture = async (req: Request, res: Response, next: NextFunct
         }
         return successResponse(res, {
             message: SUCCESSFULLY_UPDATED_FIXTURES,
-            code: 201
         });
     } catch (error) {
         return next(errorResponse(req, res, genericErrors.errorUpdatingFixture));
@@ -127,15 +129,15 @@ export const updateFixture = async (req: Request, res: Response, next: NextFunct
 export const viewSingleFixture = async (req: Request, res: Response, next: NextFunction) => {
     const { fixtureId } = req.params;
     try {
-
+       
         const fixture = await FixtureModel.findById({ _id: fixtureId }).exec();
         if (!fixture) {
             return errorResponse(req, res, genericErrors.invalidFixture);
         }
+        // await redisDB.set(singleFixture(fixtureId), 1440, fixture);
         return successResponse(res, {
             data: fixture,
             message: SUCCESSFULLY_FETCHED_FIXTURE,
-            code: 201
         });
     } catch (error) {
         return next(errorResponse(req, res, genericErrors.errorFetchingSingleFixture));
@@ -204,8 +206,6 @@ export const viewAllFixture = async (req: Request, res: Response, next: NextFunc
  */
 export const fetchCompletedFixtures = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        console.log('FETCHimngggggg');
-        
         // Check page number from the params sent in the url or set default to 1
         const page: number = parseInt(req.params.page) || 1;
 
@@ -326,8 +326,8 @@ export const searchFixture = async (req: Request, res: Response, next: NextFunct
         const fixturePromise = await FixtureModel.find({
             $or: [
                 { status },
-                { 'teamA.0.name': new RegExp(`^${name}$`, 'i') },
-                { 'teamB.0.name': new RegExp(`^${name}$`, 'i') },
+                { 'firstTeam.0.name': new RegExp(`^${name}$`, 'i') },
+                { 'firstTeam.0.name': new RegExp(`^${name}$`, 'i') },
                 { matchInfo: { $elemMatch: { date, stadium } } }
             ]
         }).sort({

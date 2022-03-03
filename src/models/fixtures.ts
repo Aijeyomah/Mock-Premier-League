@@ -13,6 +13,7 @@ import { Document, Model, model, Schema } from "mongoose";
     password: string;
     createdAt: Date;
     updatedAt: Date;
+    _doc?: string;
   
   }
 
@@ -24,7 +25,7 @@ const team = {
     enum: ['AFC Bournemouth', 'Arsenal', 'Aston Villa', 'Brighton & Hove Albion', 'Burnley', 'Chelsea',
       'Crystal Palace', 'Everton', 'Leicester City', 'Liverpool', 'Manchester City', 'Manchester United',
       'Newcastle United', ' Norwich City', 'Sheffield United', 'Southampton', 'Tottenham Hotspur', 'Watford',
-      'West Ham United', 'Wolverhampton Wanderers']
+      'West Ham United', 'Wolverhampton Wanderers', 'Barcalona']
   },
   score: { type: Number, default: 0 }
 };

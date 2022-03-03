@@ -3,20 +3,20 @@ import chaiHttp from 'chai-http';
 import 'dotenv/config';
 
 import app from '../../src/index';
-import { createTeam, editTeamData } from './dummy.data';
+import { createFixture , editFixture } from './dummy.data';
 
-const teamBaseUrl = '/api/v1/teams';
+const fixtureBaseUrl = '/api/v1/fixture';
 
 const { expect } = chai;
 chai.use(chaiHttp)
 
-describe('Team Tests', () => {
-    describe('Add team', () => {
+describe('Fixture Tests', () => {
+    describe('Add Fixture', () => {
         it('It should throw error when no token is provided', (done) => {
             chai
                 .request(app)
-                .post(teamBaseUrl)
-                .send(createTeam)
+                .post(fixtureBaseUrl)
+                .send(createFixture)
                 .end((err, res) => {
                     const { message, status } = res.body;
                     expect(res.status).to.equal(401);
@@ -33,11 +33,11 @@ describe('Team Tests', () => {
         it('It should throw error when access is not granted', (done) => {
             chai
                 .request(app)
-                .post(teamBaseUrl)
+                .post(fixtureBaseUrl)
                 .set({
                     Authorization: `Bearer ${ process.env.USER_ONE_ACCESS_TOKEN}`,
                 })
-                .send(createTeam)
+                .send(fixtureBaseUrl)
                 .end((err, res) => {
                     console.log(res.body.message)
                     const { message, status } = res.body;
@@ -51,61 +51,41 @@ describe('Team Tests', () => {
                     done();
                 });
         });
-        it('It should throw error when payload is incomplete', (done) => {
-            chai
-                .request(app)
-                .post(teamBaseUrl)
-                .set({
-                    Authorization: `Bearer ${process.env.ADMIN_ONE_ACCESS_TOKEN}`,
-                })
-                .send({})
-                .end((err, res) => {
-                    const { message, status } = res.body;
-                    expect(res.status).to.equal(400);
-                    expect(res.body).to.have.property('message');
-                    expect(res.body).to.have.property('status');
-                    expect(message).to.equal(
-                        '"teamName" is required',
-                    );
-                    done();
-                });
-        });
+
 
         it('It successfully add a team', (done) => {
             chai
                 .request(app)
-                .post(teamBaseUrl)
+                .post(fixtureBaseUrl)
                 .set({
                     Authorization: `Bearer ${process.env.ADMIN_ONE_ACCESS_TOKEN}`,
                 })
 
-                .send(createTeam)
+                .send(createFixture)
                 .end((err, res) => {
-                    console.log(res.body.message)
                     const { message, status, data } = res.body;
                     expect(res.status).to.equal(200);
                     expect(res.body).to.have.property('message');
                     expect(res.body).to.have.property('status');
                     expect(res.body).to.have.property('data');
                     expect(message).to.equal(
-                        'Team added successfully',
+                        'Successfully created fixtures',
                     );
                     expect(status).to.equal('success');
                     expect(data).to.be.a('object');
-                    expect(data.teamName).to.equal(createTeam.teamName);
-                    process.env.TEAM_ONE_ID = res.body.data._id;
+                    process.env.FIXTURE_ONE_ID = res.body.data._id;
                     done();
                 });
         });
 
     })
 
-    describe('delete team', () => {
+    describe('delete fixture', () => {
         it('It should throw error when no token is provided', (done) => {
             chai
                 .request(app)
-                .delete(`${teamBaseUrl}/${process.env.TEAM_ONE_ID}`)
-                .send(createTeam)
+                .delete(`${fixtureBaseUrl}/${process.env.FIXTURE_ONE_ID}`)
+                .send(createFixture)
                 .end((err, res) => {
                     const { message, status } = res.body;
                     expect(res.status).to.equal(401);
@@ -121,7 +101,7 @@ describe('Team Tests', () => {
         it('It should throw error when access is not granted', (done) => {
             chai
                 .request(app)
-                .delete(`${teamBaseUrl}/${process.env.TEAM_ONE_ID}`)
+                .delete(`${fixtureBaseUrl}/${process.env.FIXTURE_ONE_ID}`)
                 .set({
                     Authorization: `Bearer ${ process.env.USER_ONE_ACCESS_TOKEN}`,
                 })
@@ -136,10 +116,10 @@ describe('Team Tests', () => {
                     done();
                 });
         });
-        it('It should throw error when the team id is not found', (done) => {
+        it('It should throw error when the fixture id is not found', (done) => {
             chai
               .request(app)
-              .delete(`${teamBaseUrl}/621fc45b6b0445e7bf4d2999`)
+              .delete(`${fixtureBaseUrl}/621fc45b6b0445e7bf4d2999`)
               .set({
                 Authorization: `Bearer ${process.env.ADMIN_ONE_ACCESS_TOKEN}`,
               })
@@ -149,28 +129,26 @@ describe('Team Tests', () => {
                 expect(res.body).to.have.property('message');
                 expect(res.body).to.have.property('status');
                 expect(message).to.equal(
-                  'Team does not exist',
+                    'Fixture does not exist',
                 );
                 done();
               });
           });
 
-        it('It successfully delete a team', (done) => {
+        it('It successfully delete a fixture', (done) => {
             chai
                 .request(app)
-                .delete(`${teamBaseUrl}/${process.env.TEAM_ONE_ID}`)
+                .delete(`${fixtureBaseUrl}/${process.env.FIXTURE_ONE_ID}`)
                 .set({
                     Authorization: `Bearer ${process.env.ADMIN_ONE_ACCESS_TOKEN}`,
                 })
-
-                .send(createTeam)
                 .end((err, res) => {
-                    const { message, status, data } = res.body;
+                    const { message, status } = res.body;
                     expect(res.status).to.equal(200);
                     expect(res.body).to.have.property('message');
                     expect(res.body).to.have.property('status');
                     expect(message).to.equal(
-                        'Successfully removed team',
+                        'Successfully deleted fixture',
                     );
                     expect(status).to.equal('success');
                     done();
@@ -180,12 +158,12 @@ describe('Team Tests', () => {
         it('It successfully add a team', (done) => {
             chai
                 .request(app)
-                .post(teamBaseUrl)
+                .post(fixtureBaseUrl)
                 .set({
                     Authorization: `Bearer ${process.env.ADMIN_ONE_ACCESS_TOKEN}`,
                 })
 
-                .send(createTeam)
+                .send(createFixture)
                 .end((err, res) => {
                     const { message, status, data } = res.body;
                     expect(res.status).to.equal(200);
@@ -193,24 +171,22 @@ describe('Team Tests', () => {
                     expect(res.body).to.have.property('status');
                     expect(res.body).to.have.property('data');
                     expect(message).to.equal(
-                        'Team added successfully',
+                        'Successfully created fixtures',
                     );
                     expect(status).to.equal('success');
                     expect(data).to.be.a('object');
-                    expect(data.teamName).to.equal(createTeam.teamName);
-                    process.env.TEAM_ONE_ID = res.body.data._id;
+                    process.env.FIXTURE_ONE_ID = res.body.data._id;
                     done();
                 });
         });
-
     })
 
     describe('Edit team', () => {
         it('It should throw error when no token is provided', (done) => {
             chai
                 .request(app)
-                .put(`${teamBaseUrl}/${process.env.TEAM_ONE_ID}`)
-                .send(createTeam)
+                .put(`${fixtureBaseUrl}/${process.env.FIXTURE_ONE_ID}`)
+                .send(createFixture)
                 .end((err, res) => {
                     const { message, status } = res.body;
                     expect(res.status).to.equal(401);
@@ -227,12 +203,12 @@ describe('Team Tests', () => {
         it('It should throw error when access is not granted', (done) => {
             chai
                 .request(app)
-                .put(`${teamBaseUrl}/${process.env.TEAM_ONE_ID}`)
+                .put(`${fixtureBaseUrl}/${process.env.FIXTURE_ONE_ID}`)
                 .set({
                     Authorization: `Bearer ${ process.env.USER_ONE_ACCESS_TOKEN}`,
                 })
 
-                .send(createTeam)
+                .send(createFixture)
                 .end((err, res) => {
                     const { message, status } = res.body;
                     expect(res.status).to.equal(403);
@@ -246,21 +222,21 @@ describe('Team Tests', () => {
                 });
         });
 
-        it('It should throw error when the team id is not found', (done) => {
+        it('It should throw error when the fixture id is not found', (done) => {
             chai
               .request(app)
-              .put(`${teamBaseUrl}/621fc45b6b0445e7bf4d2999`)
+              .put(`${fixtureBaseUrl}/621fc45b6b0445e7bf4d2999`)
               .set({
                 Authorization: `Bearer ${process.env.ADMIN_ONE_ACCESS_TOKEN}`,
               })
-              .send(editTeamData)
+              .send()
               .end((err, res) => {
                 const { message, status } = res.body;
                 expect(res.status).to.equal(400);
                 expect(res.body).to.have.property('message');
                 expect(res.body).to.have.property('status');
                 expect(message).to.equal(
-                  'Team does not exist',
+                  'Fixture does not exist',
                 );
                 done();
               });
@@ -270,19 +246,19 @@ describe('Team Tests', () => {
         it('It successfully edit a team', (done) => {
             chai
                 .request(app)
-                .put(`${teamBaseUrl}/${process.env.TEAM_ONE_ID}`)
+                .put(`${fixtureBaseUrl}/${process.env.FIXTURE_ONE_ID}`)
                 .set({
                     Authorization: `Bearer ${process.env.ADMIN_ONE_ACCESS_TOKEN}`,
                 })
 
-                .send(editTeamData)
+                .send(editFixture)
                 .end((err, res) => {
-                    const { message, status, data } = res.body;
+                    const { message, status } = res.body;
                     expect(res.status).to.equal(200);
                     expect(res.body).to.have.property('message');
                     expect(res.body).to.have.property('status');
                     expect(message).to.equal(
-                        'Successfully updated team',
+                        'Successfully updated fixtures',
                     );
                     expect(status).to.equal('success');
                     done();
@@ -295,7 +271,7 @@ describe('Team Tests', () => {
         it('It should throw error when no token is provided', (done) => {
             chai
                 .request(app)
-                .get(`${teamBaseUrl}/${process.env.TEAM_ONE_ID}`)
+                .get(`${fixtureBaseUrl}/${process.env.FIXTURE_ONE_ID}`)
                 .end((err, res) => {
                     const { message, status } = res.body;
                     expect(res.status).to.equal(401);
@@ -310,10 +286,10 @@ describe('Team Tests', () => {
         });
 
 
-        it('It should throw error when the team id is not found', (done) => {
+        it('It should throw error when the fixture id is not found', (done) => {
             chai
               .request(app)
-              .get(`${teamBaseUrl}/621fc45b6b0445e7bf4d2999`)
+              .get(`${fixtureBaseUrl}/621fc45b6b0445e7bf4d2999`)
               .set({
                 Authorization: `Bearer ${process.env.ADMIN_ONE_ACCESS_TOKEN}`,
               })
@@ -323,17 +299,17 @@ describe('Team Tests', () => {
                 expect(res.body).to.have.property('message');
                 expect(res.body).to.have.property('status');
                 expect(message).to.equal(
-                  'Team does not exist',
+                  'Fixture does not exist',
                 );
                 done();
               });
           });
 
 
-        it('It successfully fetch a team', (done) => {
+        it('It successfully fetch a fixture', (done) => {
             chai
                 .request(app)
-                .get(`${teamBaseUrl}/${process.env.TEAM_ONE_ID}`)
+                .get(`${fixtureBaseUrl}/${process.env.FIXTURE_ONE_ID}`)
                 .set({
                     Authorization: `Bearer ${process.env.ADMIN_ONE_ACCESS_TOKEN}`,
                 })
@@ -344,7 +320,7 @@ describe('Team Tests', () => {
                     expect(res.body).to.have.property('status');
                     expect(res.body).to.have.property('data');
                     expect(message).to.equal(
-                        'Successfully fetched team',
+                        'Successfully fetched fixture',
                     );
                     expect(status).to.equal('success');
                     expect(data).to.be.a('object');
@@ -358,7 +334,7 @@ describe('Team Tests', () => {
         it('It should throw error when no token is provided', (done) => {
             chai
                 .request(app)
-                .get(`${teamBaseUrl}/all`)
+                .get(`${fixtureBaseUrl}/${process.env.FIXTURE_ONE_ID}}`)
                 .end((err, res) => {
                     const { message, status } = res.body;
                     expect(res.status).to.equal(401);
@@ -373,10 +349,10 @@ describe('Team Tests', () => {
         });
 
 
-        it('It successfully fetch all team', (done) => {
+        it('It successfully fetch a fixture', (done) => {
             chai
                 .request(app)
-                .get(`${teamBaseUrl}/all`)
+                .get(`${fixtureBaseUrl}/${process.env.FIXTURE_ONE_ID}`)
                 .set({
                     Authorization: `Bearer ${process.env.ADMIN_ONE_ACCESS_TOKEN}`,
                 })
@@ -387,7 +363,7 @@ describe('Team Tests', () => {
                     expect(res.body).to.have.property('status');
                     expect(res.body).to.have.property('data');
                     expect(message).to.equal(
-                        'Successfully fetched all teams',
+                        'Successfully fetched fixture',
                     );
                     expect(status).to.equal('success');
                     expect(data).to.be.a('object');
