@@ -8,7 +8,6 @@ const express_1 = require("express");
 const cors_1 = __importDefault(require("cors"));
 const helmet_1 = __importDefault(require("helmet"));
 const v1_1 = __importDefault(require("../routes/v1"));
-const env_1 = __importDefault(require("./env"));
 const utils_1 = require("../utils");
 const { errorResponse, successResponse } = utils_1.Helper;
 const { notFoundApi } = utils_1.genericErrors;
@@ -24,7 +23,7 @@ const appConfig = (app) => {
         next(notFoundApi);
     });
     app.use((err, req, res, next) => errorResponse(req, res, err));
-    const port = env_1.default.PORT || 3500;
+    const port = process.env.PORT || 3500;
     app.listen(port, () => {
         logger_1.logger.info(`${MOCK_PREMIER_LEAGUE_RUNNING} ${port}`);
     });

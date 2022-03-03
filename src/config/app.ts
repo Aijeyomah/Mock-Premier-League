@@ -45,7 +45,7 @@ const appConfig = (app) => {
 
   // handles all forwarded errors
   app.use((err, req, res, next) => errorResponse(req, res, err));
-  const port = config.PORT || 3500;
+  const port = process.env.PORT || 3500;
   app.listen(port, () => {
     logger.info(`${MOCK_PREMIER_LEAGUE_RUNNING} ${port}`);
   });
