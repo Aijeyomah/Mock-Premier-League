@@ -1,6 +1,5 @@
 import { rateLimiter } from './../middleware/team/rate-limiter';
 import { logger } from './logger';
-import { db } from '../db/setup/mongo';
 /* eslint-disable no-unused-vars */
 import morgan from 'morgan';
 import { json, urlencoded } from 'express';
@@ -9,7 +8,7 @@ import helmet from 'helmet';
 import apiV1Routes from '../routes/v1';
 import config from './env';
 import { constants, genericErrors, Helper } from '../utils';
-import { redisDB } from 'db';
+import { redisDB } from '../db/index';
 
 // sets logger as a global variable
 
