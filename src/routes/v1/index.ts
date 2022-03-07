@@ -8,7 +8,7 @@ const router = Router();
 
 router.use('/auth', authRoutes);
 router.use('/teams',  teamRoutes);
-router.use('/fixture',rateLimiter, fixtureRoute); 
+router.use('/fixture', rateLimiter, fixtureRoute); 
 
 export default router;
 

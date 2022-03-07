@@ -57,6 +57,7 @@ export default {
   SUCCESSFULLY_FETCHED_COMPLETE_FIXTURES: 'Successfully completed fixtures',
   ERROR_FETCHING_FIXTURE: 'Error fetching fixture',
   ERROR_FETCHING_FIXTURES: 'Error fetching all fixture',
-  ERROR_FETCHING_PENDING_FIXTURES: 'Error fetching pending fixture'
+  ERROR_FETCHING_PENDING_FIXTURES: 'Error fetching pending fixture',
+  THROTTLE_LIMIT: 'throttled limit exceeded...'
 
 };

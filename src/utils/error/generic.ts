@@ -24,7 +24,8 @@ const {
   ERROR_UPDATING_FIXTURES,
   ERROR_FETCHING_FIXTURE,
   ERROR_FETCHING_PENDING_FIXTURES,
-  ERROR_FETCHING_FIXTURES
+  ERROR_FETCHING_FIXTURES,
+  THROTTLE_LIMIT
 } = constants;
 
 export default {
@@ -51,6 +52,7 @@ export default {
   errorFetchingSingleFixture:  new ApiError({ message: ERROR_FETCHING_FIXTURE, status: 400  }),
   errorFetchingAllFixture:  new ApiError({ message: ERROR_FETCHING_FIXTURES, status: 400  }), 
   errorFetchingPendingFixture:  new ApiError({ message: ERROR_FETCHING_PENDING_FIXTURES, status: 400  }),
+  throttleError:  new ApiError({ message: THROTTLE_LIMIT, status: 429  }),
  
 
 
