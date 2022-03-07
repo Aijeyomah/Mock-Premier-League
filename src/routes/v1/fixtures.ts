@@ -48,8 +48,6 @@ router.get(
 
 router.get(
     '/search',
-    authenticate,
-    roleAccessValidator('Admin'),
     searchFixture
 );
 
@@ -62,6 +60,7 @@ router.get(
 
 router.get(
     '/:fixtureId',
+    authenticate,
     validateParams(fixtureId),
     viewSingleFixture
 );
