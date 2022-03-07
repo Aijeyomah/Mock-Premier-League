@@ -7,7 +7,7 @@ const {
 console.log(NODE_ENV);
 
 const BASE_URL = NODE_ENV === 'production'
-  ? process.env.MOCK_PREMIER_LEAGUE
+  ? 'https://mock-premier-league1.herokuapp.com'
   : `http://localhost:${PORT || 3500}`;
 
 export default {
