@@ -45,7 +45,7 @@ export const createFixture = async(req: Request, res: Response, next: NextFuncti
             
             const data = await fixture.save();
             return successResponse(res, {
-                data: {fixtureLink:  `${BASE_URL}/api/v1/fixture/${data._id}`, ...data},
+                data: {fixtureLink:  `${BASE_URL}/api/v1/fixture/${data._id}`, data},
                 message: SUCCESSFULLY_ADDED_FIXTURE,
             });
         }
