@@ -53,6 +53,8 @@ exports.default = {
     SUCCESSFULLY_FETCHED_FIXTURE: 'Successfully fetched fixture',
     SUCCESSFULLY_FETCHED_TEAM: 'Successfully fetched team',
     SUCCESSFULLY_FETCHED_FIXTURES: 'Successfully all fixtures',
+    SUCCESSFULLY_FETCHED_PENDING_FIXTURES: 'Successfully pending fixtures',
+    SUCCESSFULLY_FETCHED_COMPLETE_FIXTURES: 'Successfully completed fixtures',
     ERROR_FETCHING_FIXTURE: 'Error fetching fixture',
     ERROR_FETCHING_FIXTURES: 'Error fetching all fixture',
     ERROR_FETCHING_PENDING_FIXTURES: 'Error fetching pending fixture'

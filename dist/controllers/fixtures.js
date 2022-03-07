@@ -13,14 +13,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.searchFixture = exports.fetchPendingFixture = exports.fetchCompletedFixtures = exports.viewAllFixture = exports.viewSingleFixture = exports.updateFixture = exports.deleteFixture = exports.createFixture = void 0;
-const redis_1 = require("db/setup/redis");
+const index_1 = require("../db/index");
+const logger_1 = require("./../config/logger");
 const fixtures_1 = require("./../models/fixtures");
 const utils_1 = require("../utils");
 const mongoose_1 = __importDefault(require("mongoose"));
 const moment_1 = __importDefault(require("moment"));
 const { errorResponse, successResponse, compareTwoTeams } = utils_1.Helper;
-const { SUCCESSFULLY_ADDED_FIXTURE, SUCCESSFULLY_DELETED_FIXTURE, SUCCESSFULLY_UPDATED_FIXTURES, SUCCESSFULLY_FETCHED_FIXTURE, SUCCESSFULLY_FETCHED_FIXTURES, BASE_URL, REDIS_KEYS } = utils_1.constants;
-const { singleFixture, allFixturesKeys } = REDIS_KEYS;
+const { SUCCESSFULLY_ADDED_FIXTURE, SUCCESSFULLY_DELETED_FIXTURE, SUCCESSFULLY_UPDATED_FIXTURES, SUCCESSFULLY_FETCHED_FIXTURE, SUCCESSFULLY_FETCHED_FIXTURES, BASE_URL, REDIS_KEYS, SUCCESSFULLY_FETCHED_PENDING_FIXTURES, SUCCESSFULLY_FETCHED_COMPLETE_FIXTURES, } = utils_1.constants;
+const { singleFixture, allFixturesKeys, completedFixturesKeys, pendingFixturesKeys } = REDIS_KEYS;
 const createFixture = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { firstTeam, secondTeam, matchInfo } = req.body;
     try {
@@ -57,6 +58,8 @@ const deleteFixture = (req, res, next) => __awaiter(void 0, void 0, void 0, func
         if (!fixture) {
             return errorResponse(req, res, utils_1.genericErrors.invalidFixture);
         }
+        yield index_1.redisDB.del(singleFixture(fixtureId));
+        logger_1.logger.info('deleted from cache');
         return successResponse(res, {
             message: SUCCESSFULLY_DELETED_FIXTURE,
         });
@@ -95,10 +98,19 @@ exports.updateFixture = updateFixture;
 const viewSingleFixture = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { fixtureId } = req.params;
     try {
+        const data = yield index_1.redisDB.get(singleFixture(fixtureId));
+        if (data) {
+            logger_1.logger.info('returning from cache...');
+            return successResponse(res, {
+                data: JSON.parse(data),
+                message: SUCCESSFULLY_FETCHED_FIXTURE,
+            });
+        }
         const fixture = yield fixtures_1.FixtureModel.findById({ _id: fixtureId }).exec();
         if (!fixture) {
             return errorResponse(req, res, utils_1.genericErrors.invalidFixture);
         }
+        yield index_1.redisDB.setEx(singleFixture(fixture._id), utils_1.constants['8HRS'], JSON.stringify(fixture));
         return successResponse(res, {
             data: fixture,
             message: SUCCESSFULLY_FETCHED_FIXTURE,
@@ -111,9 +123,9 @@ const viewSingleFixture = (req, res, next) => __awaiter(void 0, void 0, void 0, 
 exports.viewSingleFixture = viewSingleFixture;
 const viewAllFixture = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield redis_1.redisDB.get(allFixturesKeys);
+        const result = yield index_1.redisDB.get(allFixturesKeys);
         if (result) {
-            console.log('entere here!!!');
+            logger_1.logger.info('returning from cache');
             return successResponse(res, {
                 message: SUCCESSFULLY_FETCHED_FIXTURES,
                 data: JSON.parse(result),
@@ -137,7 +149,7 @@ const viewAllFixture = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         }
         else {
             const data = { teams: allFixtures, page, pages, count };
-            yield redis_1.redisDB.setEx(allFixturesKeys, utils_1.constants['8HRS'], JSON.stringify(data));
+            yield index_1.redisDB.setEx(allFixturesKeys, utils_1.constants['8HRS'], JSON.stringify(data));
             return successResponse(res, {
                 message: SUCCESSFULLY_FETCHED_FIXTURES,
                 data: data,
@@ -152,6 +164,15 @@ const viewAllFixture = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
 exports.viewAllFixture = viewAllFixture;
 const fetchCompletedFixtures = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const result = yield index_1.redisDB.get(completedFixturesKeys);
+        if (result) {
+            logger_1.logger.info('returning from cache');
+            return successResponse(res, {
+                message: SUCCESSFULLY_FETCHED_COMPLETE_FIXTURES,
+                data: JSON.parse(result),
+                code: 201,
+            });
+        }
         const page = parseInt(req.params.page) || 1;
         const limit = 10;
         const skip = (page * limit) - limit;
@@ -167,25 +188,32 @@ const fetchCompletedFixtures = (req, res, next) => __awaiter(void 0, void 0, voi
         const [allFixtures, count] = yield Promise.all([fixturePromise, countPromise]);
         const pages = Math.ceil(count / limit);
         if (!allFixtures.length && skip) {
-            console.log('I CAME HERE');
             return errorResponse(req, res, utils_1.genericErrors.invalidTeam);
         }
         const data = { teams: allFixtures, page, pages, count };
-        console.log('I CAME HERE AGAIN', data);
+        yield index_1.redisDB.setEx(completedFixturesKeys, utils_1.constants['8HRS'], JSON.stringify(data));
         return successResponse(res, {
-            message: SUCCESSFULLY_FETCHED_FIXTURES,
+            message: SUCCESSFULLY_FETCHED_COMPLETE_FIXTURES,
             data: data,
             code: 201,
         });
     }
     catch (error) {
-        console.log('%%%%%%%%%%%%%%%%%%%%%%%%', error);
         return next(errorResponse(req, res, utils_1.genericErrors.errorFetchingAllFixture));
     }
 });
 exports.fetchCompletedFixtures = fetchCompletedFixtures;
 const fetchPendingFixture = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const result = yield index_1.redisDB.get(pendingFixturesKeys);
+        if (result) {
+            logger_1.logger.info('returning from cache');
+            return successResponse(res, {
+                message: SUCCESSFULLY_FETCHED_PENDING_FIXTURES,
+                data: JSON.parse(result),
+                code: 201,
+            });
+        }
         const page = parseInt(req.params.page) || 1;
         const limit = 10;
         const skip = (page * limit) - limit;
@@ -205,8 +233,9 @@ const fetchPendingFixture = (req, res, next) => __awaiter(void 0, void 0, void 0
         }
         else {
             const data = { teams: allFixtures, page, pages, count };
+            yield index_1.redisDB.setEx(pendingFixturesKeys, utils_1.constants['8HRS'], JSON.stringify(data));
             return successResponse(res, {
-                message: SUCCESSFULLY_FETCHED_FIXTURES,
+                message: SUCCESSFULLY_FETCHED_PENDING_FIXTURES,
                 data: data,
                 code: 201,
             });

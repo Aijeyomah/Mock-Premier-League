@@ -1,4 +1,4 @@
-import { redisDB } from 'db/setup/redis';
+import { redisDB } from '../db/index';
 import { logger } from './../config/logger';
 import { FixtureModel } from './../models/fixtures';
 import { genericErrors, Helper, constants } from '../utils';
@@ -72,6 +72,8 @@ export const deleteFixture = async (req: Request, res: Response, next: NextFunct
         if (!fixture) {
             return errorResponse(req, res, genericErrors.invalidFixture);
         }
+        await redisDB.del(singleFixture(fixtureId));
+        logger.info('deleted from cache')
         return successResponse(res, {
             message: SUCCESSFULLY_DELETED_FIXTURE,
         });
@@ -132,20 +134,19 @@ export const viewSingleFixture = async (req: Request, res: Response, next: NextF
     const { fixtureId } = req.params;
     try {
        
-//         const data = await redisDB.get(singleFixture(data._id));
-//        if(data){
-// console.log('iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
-
-    //     return successResponse(res, {
-    //         data: data,
-    //         message: SUCCESSFULLY_FETCHED_FIXTURE,
-    //     });
-    //    }
+        const data = await redisDB.get(singleFixture(fixtureId));
+       if(data){
+           logger.info('returning from cache...')
+        return successResponse(res, {
+            data:  JSON.parse(data),
+            message: SUCCESSFULLY_FETCHED_FIXTURE,
+        });
+       }
         const fixture = await FixtureModel.findById({ _id: fixtureId }).exec();
         if (!fixture) {
             return errorResponse(req, res, genericErrors.invalidFixture);
         }
-        // await redisDB.setEx(singleFixture(fixture._id), constants['8HRS'], JSON.stringify(fixture));
+       await redisDB.setEx(singleFixture(fixture._id), constants['8HRS'], JSON.stringify(fixture));
 
         return successResponse(res, {
             data: fixture,
