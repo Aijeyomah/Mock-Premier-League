@@ -50,7 +50,7 @@ The API is hosted at
 
 ## API Documentation
 
-[https://documenter.getpostman.com/view/11087570/UVktoY5u#f85188aa-f2eb-488e-b98b-2d2330fb8049](https://documenter.getpostman.com/view/11087570/UVktoY5u#f85188aa-f2eb-488e-b98b-2d2330fb8049)
+[https://documenter.getpostman.com/view/11087570/UVktoY5u](https://documenter.getpostman.com/view/11087570/UVktoY5u)
 
 ## Author
 
