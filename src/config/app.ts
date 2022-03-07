@@ -1,6 +1,6 @@
 import { rateLimiter } from './../middleware/team/rate-limiter';
 import { logger } from './logger';
-import { db } from './../db/setup/mongo';
+import { db } from '../db/setup/mongo';
 /* eslint-disable no-unused-vars */
 import morgan from 'morgan';
 import { json, urlencoded } from 'express';
