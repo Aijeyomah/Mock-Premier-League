@@ -39,7 +39,7 @@ export const rateLimiter = async(req,res,next) => {
       }
       redisDB.set(req.headers.user,JSON.stringify(body))
       // allow request
-      next()
+     return next()
    
   }
 }
