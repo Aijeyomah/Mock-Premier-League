@@ -200,7 +200,7 @@ class Helper {
     const aggregateError = { ...serverError, ...error };
     Helper.apiErrLogMessager(aggregateError, req);
     return res.status(aggregateError.status).json({
-      status: 400,
+      status: aggregateError.status,
       message: aggregateError.message,
       errors: aggregateError.errors
     });
