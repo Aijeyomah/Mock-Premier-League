@@ -97,6 +97,7 @@ export const updateFixture = async (req: Request, res: Response, next: NextFunct
         } = body;
 
         const { fixtureId } = params;
+        await redisDB.del(singleFixture(fixtureId));
         const fixture = await FixtureModel.findByIdAndUpdate(
             { _id: fixtureId },
             {
