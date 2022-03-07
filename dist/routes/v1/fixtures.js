@@ -18,8 +18,8 @@ router.delete('/:fixtureId', authenticate, roleAccessValidator(['Admin']), valid
 router.put('/:fixtureId', authenticate, roleAccessValidator(['Admin']), validateParams(fixtures_1.fixtureId), fixtures_2.updateFixture);
 router.get('/completed', authenticate, fixtures_2.fetchCompletedFixtures);
 router.get('/pending', authenticate, fixtures_2.fetchPendingFixture);
-router.get('/search', authenticate, roleAccessValidator('Admin'), fixtures_2.searchFixture);
+router.get('/search', fixtures_2.searchFixture);
 router.get('/all', authenticate, fixtures_2.viewAllFixture);
-router.get('/:fixtureId', validateParams(fixtures_1.fixtureId), fixtures_2.viewSingleFixture);
+router.get('/:fixtureId', authenticate, validateParams(fixtures_1.fixtureId), fixtures_2.viewSingleFixture);
 exports.default = router;
 //# sourceMappingURL=fixtures.js.map

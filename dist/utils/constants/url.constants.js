@@ -5,8 +5,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const env_1 = __importDefault(require("../../config/env"));
 const { NODE_ENV, PORT } = env_1.default;
+console.log(NODE_ENV);
 const BASE_URL = NODE_ENV === 'production'
-    ? 'https://mock-premier-league1.herokuapp.com'
+    ? process.env.MOCK_PREMIER_LEAGUE
     : `http://localhost:${PORT || 3500}`;
 exports.default = {
     BASE_URL,

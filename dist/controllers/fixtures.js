@@ -39,7 +39,7 @@ const createFixture = (req, res, next) => __awaiter(void 0, void 0, void 0, func
             }
             const data = yield fixture.save();
             return successResponse(res, {
-                data: Object.assign({ fixtureLink: `${BASE_URL}/api/v1/fixture/${data._id}` }, data),
+                data: { fixtureLink: `${BASE_URL}/api/v1/fixture/${data._id}`, data },
                 message: SUCCESSFULLY_ADDED_FIXTURE,
             });
         }
@@ -74,6 +74,8 @@ const updateFixture = (req, res, next) => __awaiter(void 0, void 0, void 0, func
         const { body, params } = req;
         const { firstTeam, secondTeam, matchInfo, status } = body;
         const { fixtureId } = params;
+        yield index_1.redisDB.del(singleFixture(fixtureId));
+        logger_1.logger.info('deleted from cache');
         const fixture = yield fixtures_1.FixtureModel.findByIdAndUpdate({ _id: fixtureId }, {
             $set: {
                 firstTeam,
