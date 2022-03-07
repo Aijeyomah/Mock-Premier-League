@@ -7,9 +7,12 @@ import mongoose from 'mongoose';
 import moment from 'moment';
 
 const { errorResponse, successResponse, compareTwoTeams } = Helper;
-const { SUCCESSFULLY_ADDED_FIXTURE, SUCCESSFULLY_DELETED_FIXTURE, SUCCESSFULLY_UPDATED_FIXTURES, SUCCESSFULLY_FETCHED_FIXTURE, SUCCESSFULLY_FETCHED_FIXTURES, BASE_URL, REDIS_KEYS } = constants;
+const { SUCCESSFULLY_ADDED_FIXTURE, SUCCESSFULLY_DELETED_FIXTURE, SUCCESSFULLY_UPDATED_FIXTURES, 
+    SUCCESSFULLY_FETCHED_FIXTURE, SUCCESSFULLY_FETCHED_FIXTURES,
+     BASE_URL, REDIS_KEYS , SUCCESSFULLY_FETCHED_PENDING_FIXTURES, SUCCESSFULLY_FETCHED_COMPLETE_FIXTURES
+    ,} = constants;
 
-const { singleFixture } = REDIS_KEYS;
+const { singleFixture, allFixturesKeys, completedFixturesKeys, pendingFixturesKeys } = REDIS_KEYS;
 
 /**
  *  admin can add fixture
@@ -41,7 +44,6 @@ export const createFixture = async(req: Request, res: Response, next: NextFuncti
             }
             
             const data = await fixture.save();
-            
             return successResponse(res, {
                 data: {fixtureLink:  `${BASE_URL}/api/v1/fixture/${data._id}`, ...data},
                 message: SUCCESSFULLY_ADDED_FIXTURE,
@@ -130,11 +132,21 @@ export const viewSingleFixture = async (req: Request, res: Response, next: NextF
     const { fixtureId } = req.params;
     try {
        
+//         const data = await redisDB.get(singleFixture(data._id));
+//        if(data){
+// console.log('iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
+
+    //     return successResponse(res, {
+    //         data: data,
+    //         message: SUCCESSFULLY_FETCHED_FIXTURE,
+    //     });
+    //    }
         const fixture = await FixtureModel.findById({ _id: fixtureId }).exec();
         if (!fixture) {
             return errorResponse(req, res, genericErrors.invalidFixture);
         }
-        // await redisDB.set(singleFixture(fixtureId), 1440, fixture);
+        // await redisDB.setEx(singleFixture(fixture._id), constants['8HRS'], JSON.stringify(fixture));
+
         return successResponse(res, {
             data: fixture,
             message: SUCCESSFULLY_FETCHED_FIXTURE,
@@ -154,6 +166,17 @@ export const viewSingleFixture = async (req: Request, res: Response, next: NextF
  */
 export const viewAllFixture = async (req: Request, res: Response, next: NextFunction) => {
     try {
+
+       const result = await redisDB.get(allFixturesKeys);
+            if (result) {
+                logger.info('returning from cache');
+                
+                return successResponse(res, {
+                    message: SUCCESSFULLY_FETCHED_FIXTURES,
+                    data: JSON.parse(result),
+                    code: 201,
+                });
+            }
         // Check page number from the params sent in the url or set default to 1
         const page: number = parseInt(req.params.page) || 1;
 
@@ -179,6 +202,8 @@ export const viewAllFixture = async (req: Request, res: Response, next: NextFunc
             return errorResponse(req, res, genericErrors.invalidTeam);
         } else {
             const data = { teams: allFixtures, page, pages, count }
+            await redisDB.setEx(allFixturesKeys, constants['8HRS'], JSON.stringify(data));
+
             return successResponse(res, {
                 message: SUCCESSFULLY_FETCHED_FIXTURES,
                 data: data,
@@ -206,6 +231,17 @@ export const viewAllFixture = async (req: Request, res: Response, next: NextFunc
  */
 export const fetchCompletedFixtures = async (req: Request, res: Response, next: NextFunction) => {
     try {
+
+        const result = await redisDB.get(completedFixturesKeys);
+        if (result) {
+            logger.info('returning from cache');
+            
+            return successResponse(res, {
+                message: SUCCESSFULLY_FETCHED_COMPLETE_FIXTURES,
+                data: JSON.parse(result),
+                code: 201,
+            });
+        }
         // Check page number from the params sent in the url or set default to 1
         const page: number = parseInt(req.params.page) || 1;
 
@@ -228,22 +264,19 @@ export const fetchCompletedFixtures = async (req: Request, res: Response, next: 
 
         // If posts is empty for paginated Pages
         if (!allFixtures.length && skip) {
-            console.log('I CAME HERE');
             
             return errorResponse(req, res, genericErrors.invalidTeam);
         } 
         
             const data = { teams: allFixtures, page, pages, count }
-            console.log('I CAME HERE AGAIN', data );
+            await redisDB.setEx(completedFixturesKeys, constants['8HRS'], JSON.stringify(data));
             return successResponse(res, {
-                message: SUCCESSFULLY_FETCHED_FIXTURES,
+                message: SUCCESSFULLY_FETCHED_COMPLETE_FIXTURES,
                 data: data,
                 code: 201,
             });
       
     } catch (error) {
-        console.log('%%%%%%%%%%%%%%%%%%%%%%%%', error);
-        
         return next(errorResponse(req, res, genericErrors.errorFetchingAllFixture));
 
     }
@@ -265,6 +298,16 @@ export const fetchCompletedFixtures = async (req: Request, res: Response, next: 
 export const fetchPendingFixture = async (req: Request, res: Response, next: NextFunction) => {
     try {
 
+        const result = await redisDB.get(pendingFixturesKeys);
+        if (result) {
+            logger.info('returning from cache');
+            
+            return successResponse(res, {
+                message: SUCCESSFULLY_FETCHED_PENDING_FIXTURES,
+                data: JSON.parse(result),
+                code: 201,
+            });
+        }
         // Check page number from the params sent in the url or set default to 1
         const page: number = parseInt(req.params.page) || 1;
 
@@ -290,9 +333,10 @@ export const fetchPendingFixture = async (req: Request, res: Response, next: Nex
             return errorResponse(req, res, genericErrors.invalidTeam);
         } else {
             const data = { teams: allFixtures, page, pages, count }
-    
+            await redisDB.setEx(pendingFixturesKeys, constants['8HRS'], JSON.stringify(data));
+
             return successResponse(res, {
-                message: SUCCESSFULLY_FETCHED_FIXTURES,
+                message: SUCCESSFULLY_FETCHED_PENDING_FIXTURES,
                 data: data,
                 code: 201,
             });
@@ -312,6 +356,7 @@ export const fetchPendingFixture = async (req: Request, res: Response, next: Nex
  */
 export const searchFixture = async (req: Request, res: Response, next: NextFunction) => {
     try {
+
         const { name, date, status, stadium } = req.body;
         const { query } = req;
         let { perPage } = query;

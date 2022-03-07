@@ -5,6 +5,7 @@ import processStatus from './process.status';
 import urlConstants from './url.constants';
 import utilConstant from './util.constants';
 import redisKeys from './redis-keys';
+import timePerSec from './time.per.sec';
 
 export default {
   ...activityStatus,
@@ -14,4 +15,5 @@ export default {
   ...urlConstants,
   ...utilConstant,
   ...redisKeys,
+  ...timePerSec,
 };
