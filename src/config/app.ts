@@ -42,8 +42,8 @@ const appConfig = (app) => {
   app.use((req, res, next) => {
     next(notFoundApi);
   })
-  //redisDB.connect()
-  //redisDB.on('connect', () =>  logger.info('REDIS_RUNNING'));
+  redisDB.connect()
+  redisDB.on('connect', () =>  logger.info('REDIS_RUNNING'));
 
   // handles all forwarded errors
   app.use((err, req, res, next) => errorResponse(req, res, err));
