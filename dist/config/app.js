@@ -10,7 +10,7 @@ const cors_1 = __importDefault(require("cors"));
 const helmet_1 = __importDefault(require("helmet"));
 const v1_1 = __importDefault(require("../routes/v1"));
 const utils_1 = require("../utils");
-const db_1 = require("db");
+const index_1 = require("../db/index");
 const { errorResponse, successResponse } = utils_1.Helper;
 const { notFoundApi } = utils_1.genericErrors;
 const { WELCOME, v1, MOCK_PREMIER_LEAGUE_RUNNING, } = utils_1.constants;
@@ -25,8 +25,8 @@ const appConfig = (app) => {
     app.use((req, res, next) => {
         next(notFoundApi);
     });
-    db_1.redisDB.connect();
-    db_1.redisDB.on('connect', () => logger_1.logger.info('REDIS_RUNNING'));
+    index_1.redisDB.connect();
+    index_1.redisDB.on('connect', () => logger_1.logger.info('REDIS_RUNNING'));
     app.use((err, req, res, next) => errorResponse(req, res, err));
     const port = process.env.PORT || 3500;
     app.listen(port, () => {

@@ -213,6 +213,8 @@ export const viewAllFixture = async (req: Request, res: Response, next: NextFunc
         }
     }
     catch (error) {
+        console.log(error);
+        
         return next(errorResponse(req, res, genericErrors.errorFetchingAllFixture));
     }
 }

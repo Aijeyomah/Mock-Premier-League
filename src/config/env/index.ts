@@ -5,7 +5,8 @@ import production from './production';
 
 const {
     MOCK_PREMIER_LEAGUE_PORT: PORT,
-    MOCK_PREMIER_LEAGUE_NODE_ENV: NODE_ENV
+    MOCK_PREMIER_LEAGUE_NODE_ENV: NODE_ENV,
+    
 } = process.env;
 
 const currentEnv = {

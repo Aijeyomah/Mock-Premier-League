@@ -37,7 +37,15 @@ const bluebird_1 = require("bluebird");
 const env_1 = __importDefault(require("../../config/env"));
 (0, bluebird_1.promisifyAll)(redis);
 const { NODE_ENV, REDIS_URL } = env_1.default;
-const redisDB = redis.createClient();
+const host = process.env.redisHost;
+const port = process.env.redisPort;
+const redisDB = redis.createClient({
+    password: process.env.REDIS_PASS,
+    socket: {
+        port: Number(port),
+        host: host,
+    }
+});
 exports.redisDB = redisDB;
 if (NODE_ENV === 'test') {
     redisDB.select(3)

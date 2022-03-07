@@ -158,6 +158,7 @@ const viewAllFixture = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         }
     }
     catch (error) {
+        console.log(error);
         return next(errorResponse(req, res, utils_1.genericErrors.errorFetchingAllFixture));
     }
 });

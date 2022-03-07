@@ -7,7 +7,7 @@ const app_root_path_1 = __importDefault(require("app-root-path"));
 const development_1 = __importDefault(require("./development"));
 const test_1 = __importDefault(require("./test"));
 const production_1 = __importDefault(require("./production"));
-const { MOCK_PREMIER_LEAGUE_PORT: PORT, MOCK_PREMIER_LEAGUE_NODE_ENV: NODE_ENV } = process.env;
+const { MOCK_PREMIER_LEAGUE_PORT: PORT, MOCK_PREMIER_LEAGUE_NODE_ENV: NODE_ENV, } = process.env;
 const currentEnv = {
     development: development_1.default,
     test: test_1.default,
